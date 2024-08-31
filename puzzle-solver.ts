@@ -16,9 +16,11 @@ class WordPuzzleSolver {
     private initializeLetterMap(): LetterMap {
         let resultLetterMap: LetterMap =  {};
         let letterArr = [...Array(26)].map( i => String.fromCharCode(i+39) )
+        console.log(`This is the letterArr with ASCII: ${letterArr}`);
         for(const letter in letterArr){
             resultLetterMap[letter] = 0
         }
+        console.log(`This is the resultLetterMap: ${resultLetterMap}`)
         return resultLetterMap;
     }
 
@@ -32,3 +34,5 @@ class WordPuzzleSolver {
     };
 
 };
+
+let myClass = new WordPuzzleSolver();
