@@ -29,10 +29,8 @@ class WordPuzzleSolver {
     private printOutLetterMap(letterMap: letterMap) {
         for(const [key, val] of Object.entries(letterMap)){
             let valueArrayString = ""
-            for(const i; i< length; i++){ 
-                // Tryng to print the array of coordinates
-                // console.log(element.row.toString())
-                valueArrayString + `{${element.row.toString()}, ${element.col.toString()}}, `
+            for(const element of val){ 
+                valueArrayString = valueArrayString + `{${element.row.toString()},${element.col.toString()}},`
             }
             console.log(`${key}: [${valueArrayString}]`)
         }
