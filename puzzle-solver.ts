@@ -8,7 +8,7 @@ class WordPuzzleSolver {
     private wordPuzzle: string[][] = [['C', 'B', 'T'], ['A', 'R', 'M'], ['T', 'A', 'V'], ['j', 'm', 'j']];
     private wordsList: string[] = ["CAT", "ARM", "ART"];
     private letterMap: letterMap;
-    private boundaryCharacter = '@';
+    private boundaryCharacter: string = '@';
 
 
     constructor() {
@@ -16,6 +16,8 @@ class WordPuzzleSolver {
         this.populateLetterMapWith(this.wordPuzzle);
     };
 
+    // Creates a dictionary known as the letterMap which contains a key-value pair of each letter of the alphabet and the
+    // coordinates where it can be found in the puzzle
     private initializeLetterMap(): letterMap {
         let resultLetterMap: letterMap = {};
         let tempArr = Array.from(Array(26))
@@ -27,6 +29,7 @@ class WordPuzzleSolver {
         return resultLetterMap;
     }
 
+    // Prints out the letterMap
     private printOutLetterMap(letterMap: letterMap) {
         for (const [key, val] of Object.entries(letterMap)) {
             let valueArrayString = ""
@@ -37,12 +40,14 @@ class WordPuzzleSolver {
         }
     }
 
+    // Updates the array containing the coordinates where each letter is found
     private updateLetterCoordArrayInLetterMap(letter: string, row: number, col: number) {
         let letterToUpper: string = letter.toUpperCase()
         let coord: coordinate = { row, col }
         this.letterMap[letterToUpper].push(coord);
     }
 
+    // Adds the coordinates of where each letter is in the puzzle into the letterMap
     private populateLetterMapWith(puzzle: string[][]) {
         for (let row = 0; row < puzzle.length; row++) {
             for (let col = 0; col < puzzle[row].length; col++) {
@@ -80,8 +85,8 @@ class WordPuzzleSolver {
         return rowIndex == nrows - 1;
     };
 
-    private isFirstRowOrCol(rowIndex: number) {
-        return rowIndex == 0;
+    private isFirstRowOrCol(index: number) {
+        return index == 0;
     };
 
     private isLastCol(rowIndex: number) {
