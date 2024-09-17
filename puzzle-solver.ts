@@ -5,15 +5,13 @@ type coordinate = {
 type letterMap = { [key: string]: coordinate[] };
 
 class WordPuzzleSolver {
-    private wordPuzzle: string[][] = [['C', 'B', 'T'], ['A', 'R', 'M'], ['T', 'A', 'V'], ['j', 'm', 'j']];
-    private wordsList: string[] = ["CAT", "ARM", "ART"];
+
     private letterMap: letterMap;
     private boundaryCharacter: string = '@';
-
+    private paddedWordPuzzle: string[][] = [];
 
     constructor() {
         this.letterMap = this.initializeLetterMap();
-        this.populateLetterMapWith(this.wordPuzzle);
     };
 
     // Creates a dictionary known as the letterMap which contains a key-value pair of each letter of the alphabet and the
@@ -30,14 +28,22 @@ class WordPuzzleSolver {
     }
 
     // Prints out the letterMap
-    private printOutLetterMap(letterMap: letterMap) {
-        for (const [key, val] of Object.entries(letterMap)) {
+    private printOutLetterMap() {
+        for (const [key, val] of Object.entries(this.letterMap)) {
             let valueArrayString = ""
             for (const element of val) {
-                valueArrayString = valueArrayString + `{${element.row.toString()},${element.col.toString()}},`
+                valueArrayString = valueArrayString.concat(`{${element.row.toString()},${element.col.toString()}}`)
             }
             console.log(`${key}: [${valueArrayString}]`)
         }
+    }
+
+    private printWordPuzzle() {
+        let output = "";
+        for(const row of this.paddedWordPuzzle){
+            output += `${row}\n`
+        }
+        console.log(output);
     }
 
     // Updates the array containing the coordinates where each letter is found
@@ -55,7 +61,6 @@ class WordPuzzleSolver {
                 this.updateLetterCoordArrayInLetterMap(letter, row, col);
             };
         };
-        this.printOutLetterMap(this.letterMap);
     };
 
     /* Pads the puzzle matrix with a boundary character to eliminate the need for boundary checking */
@@ -77,11 +82,10 @@ class WordPuzzleSolver {
         paddedPuzzle.unshift(paddingArr);
 
         return paddedPuzzle;
-
     }
 
     private isLastRow(rowIndex: number) {
-        let nrows = this.wordPuzzle.length
+        let nrows = this.paddedWordPuzzle.length
         return rowIndex == nrows - 1;
     };
 
@@ -90,7 +94,7 @@ class WordPuzzleSolver {
     };
 
     private isLastCol(rowIndex: number) {
-        let ncols = this.wordPuzzle[0].length
+        let ncols = this.paddedWordPuzzle[0].length
         return rowIndex == ncols - 1;
     };
 
@@ -100,7 +104,7 @@ class WordPuzzleSolver {
     //     // Find north and south neighbors
     //     for (let i = origin.col - 1; i < origin.col + 1; i++) {
     //         if (!this.isFirstRowOrCol(origin.row - 1)) {
-    //             if (this.wordPuzzle[origin.row - 1][i] === target) {
+    //             if (this.paddedWordPuzzle[origin.row - 1][i] === target) {
     //                 neighbors.push({ row: origin.row - 1, col: i })
     //             }
     //         }
@@ -109,6 +113,16 @@ class WordPuzzleSolver {
     //     return neighbors;
     // }
 
+    public solve(puzzle: string[][], wordList: string[]) {
+        this.populateLetterMapWith(puzzle);
+        this.paddedWordPuzzle = this.padPuzzleWithBoundaries(puzzle, this.boundaryCharacter);
+        this.printOutLetterMap();
+        this.printWordPuzzle();
+    }
+
 };
+const wordPuzzle: string[][] = [['C', 'B', 'T'], ['A', 'R', 'M'], ['T', 'A', 'V'], ['j', 'm', 'j'], ['j', 'm', 'j'], ['j', 'm', 'j'], ['j', 'm', 'j']];
+const wordList: string[] = ["CAT", "ARM", "ART"];
 
 let myClass = new WordPuzzleSolver();
+myClass.solve(wordPuzzle,wordList)
