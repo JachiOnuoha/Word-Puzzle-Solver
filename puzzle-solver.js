@@ -103,6 +103,7 @@ class WordPuzzleSolver {
                 wordPath.push({ row: x, col: y });
                 // Starting at the 3 letter of the word, keep moving in tha direction until you either find a the complete word,
                 // hit an unexpected letter or hit the boundary character
+                // We move to a letter and then check if it is the letter we are looking for
                 x = x + combo[0];
                 y = y + combo[1];
                 let i = 2;
@@ -130,17 +131,12 @@ class WordPuzzleSolver {
                     // DEBUG: console.log(`Next check at: {${x},${y}} for i at: ${i}`);
                 }
             }
+            // DEBUG: console.log(validationString)
             if (validationString === word) {
                 // Word found so stop searching
-                break;
+                wordPath.unshift(origin);
+                return wordPath;
             }
-            // DEBUG: console.log(validationString)
-        }
-        // Word path would be empty is the word is not found. If all the other letters of the word are found then prepend the
-        // coordinates of the origin
-        if (wordPath.length > 0) {
-            // Prepend origin to word path
-            wordPath.unshift(origin);
         }
         return wordPath;
     }
