@@ -107,8 +107,8 @@ class WordPuzzleSolver {
         return rowIndex == ncols - 1;
     };
 
-    public searchForWord(origin: coordinate, word: string) {
-        let wordPath: coordinate[] = [origin];
+    public searchForWord(origin: coordinate, word: string): coordinate[] {
+        let wordPath: coordinate[] = [];
         for(const combo of this.directionCombos) {
             // Move to a direction in the puzzle. Directions are one of the eight cardinal points
             let x = origin.row + combo[0];
@@ -118,7 +118,7 @@ class WordPuzzleSolver {
             if(this.paddedWordPuzzle[x][y] === word[1] && this.paddedWordPuzzle[x][y] !== this.boundaryCharacter) {
                 wordPath.push({row: x, col: y});
 
-                // Starting at the 3 letter of the word, keep moving in tha direction until you either find a the complete,
+                // Starting at the 3 letter of the word, keep moving in tha direction until you either find a the complete word,
                 // hit an unexpected letter or hit the boundary character 
                 let i = 2;
                 while(i < word.length) {
@@ -137,31 +137,31 @@ class WordPuzzleSolver {
                 }
             }
         }
-        this.printCoordArray(wordPath);
-    }
+        // Prepend origin to word path
+        wordPath.unshift(origin)
 
-    private followPath(startingAt: coordinate, direction: number[], triesLeft: number = 3) {
-        let x = startingAt.row;
-        let y = startingAt.col;
-        let isWordFound = false;
-        // Base case
-        if(this.paddedWordPuzzle[x][y] == this.boundaryCharacter || triesLeft === 0){
-            return isWordFound;
+        // If word is not found return an empty array
+        if( wordPath.length !== word.length){
+            wordPath = []
+            return wordPath;
         }
 
-        return
-
+        // wordPath.unshift(origin);
+        return wordPath
     }
 
     public solve(puzzle: string[][], wordList: string[]) {
         this.paddedWordPuzzle = this.padPuzzleWithBoundaries(puzzle, this.boundaryCharacter);
         this.populateLetterMapWith(this.paddedWordPuzzle);
         for(const word of wordList){
+            let result;
             const startingPoints = this.letterMap[word[0]];
             console.log(word);
             for(const point of startingPoints) {
-                // console.log(point)
-                this.searchForWord(point, word);
+                result = this.searchForWord(point, word);
+                if(result.length > 0){
+                    this.printCoordArray(result);
+                }
             }
         }
         // this.printOutLetterMap();
@@ -170,7 +170,7 @@ class WordPuzzleSolver {
 
 };
 const wordPuzzle: string[][] = [['C', 'B', 'A'], ['A', 'R', 'M'], ['T', 'A', 'V'], ['A', 'M', 'J'], ['N', 'M', 'J'], ['J', 'M', 'J']];
-const wordList: string[] = ['CATAN', 'ARM', 'ART', 'RBA'];
+const wordList: string[] = ['CATAN', 'ART', 'ARM', 'RBA'];
 
 let myClass = new WordPuzzleSolver();
 myClass.solve(wordPuzzle,wordList);
