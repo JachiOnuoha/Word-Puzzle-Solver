@@ -12,7 +12,6 @@ class WordPuzzleSolver {
         let resultLetterMap = {};
         let tempArr = Array.from(Array(26));
         let letterArr = [...tempArr.keys()].map((_, i) => String.fromCharCode(i + 65));
-        console.log(`This is the letterArr with ASCII: ${letterArr}`);
         for (const letter of letterArr) {
             resultLetterMap[letter] = [];
         }
@@ -93,38 +92,56 @@ class WordPuzzleSolver {
     searchForWord(origin, word) {
         let wordPath = [];
         for (const combo of this.directionCombos) {
+            let validationString = `${word[0]}`;
             // Move to a direction in the puzzle. Directions are one of the eight cardinal points
             let x = origin.row + combo[0];
             let y = origin.col + combo[1];
             // Check if the next letter of the word is at that position and append it to the word path if it is
             if (this.paddedWordPuzzle[x][y] === word[1] && this.paddedWordPuzzle[x][y] !== this.boundaryCharacter) {
+                // console.log(`${word[1]} at: {${x},${y}}`);
+                validationString += word[1];
                 wordPath.push({ row: x, col: y });
                 // Starting at the 3 letter of the word, keep moving in tha direction until you either find a the complete word,
-                // hit an unexpected letter or hit the boundary character 
+                // hit an unexpected letter or hit the boundary character
+                x = x + combo[0];
+                y = y + combo[1];
                 let i = 2;
                 while (i < word.length) {
-                    if (this.paddedWordPuzzle[x + combo[0]][y + combo[1]] !== word[i]) {
+                    // DEBUG: console.log(this.paddedWordPuzzle[x + combo[0]][y + combo[1]]);
+                    // DEBUG: console.log(wordPath)
+                    validationString += this.paddedWordPuzzle[x][y];
+                    if (this.paddedWordPuzzle[x][y] !== word[i]) {
+                        // DEBUG: console.log(`Direction:{${combo[0]},${combo[1]}} Break at: {${x},${y}} , for: ${this.paddedWordPuzzle[x][y]}`);    
+                        // Clear the word path
+                        // Dead end so stop searching
+                        wordPath = [];
                         break;
                     }
+                    // DEBUG: console.log(`Push: ${this.paddedWordPuzzle[x][y]} at: {${x},${y}} `);
                     wordPath.push({
-                        row: x + combo[0],
-                        col: y + combo[1]
+                        row: x,
+                        col: y
                     });
+                    // DEBUG: console.log(`Next check at: {${x},${y}}`);
                     // Change the starting points to the coordinate of the last letter found
                     x = x + combo[0];
                     y = y + combo[1];
                     i++;
+                    // DEBUG: console.log(`Next check at: {${x},${y}} for i at: ${i}`);
                 }
             }
+            if (validationString === word) {
+                // Word found so stop searching
+                break;
+            }
+            // DEBUG: console.log(validationString)
         }
-        // Prepend origin to word path
-        wordPath.unshift(origin);
-        // If word is not found return an empty array
-        if (wordPath.length !== word.length) {
-            wordPath = [];
-            return wordPath;
+        // Word path would be empty is the word is not found. If all the other letters of the word are found then prepend the
+        // coordinates of the origin
+        if (wordPath.length > 0) {
+            // Prepend origin to word path
+            wordPath.unshift(origin);
         }
-        // wordPath.unshift(origin);
         return wordPath;
     }
     solve(puzzle, wordList) {
@@ -135,11 +152,14 @@ class WordPuzzleSolver {
             let result;
             const startingPoints = this.letterMap[word[0]];
             for (const point of startingPoints) {
+                // DEBUG: console.log(`origin: ${point.row}, ${point.col}`)
                 result = this.searchForWord(point, word);
                 if (result.length > 0) {
+                    // Word found so stop searching
                     console.log(word);
                     this.printCoordArray(result);
                     counter++;
+                    break;
                 }
             }
         }
@@ -165,6 +185,7 @@ let list = ["APPLICATION", "BACKUP", "BINARY", "BLUETOOTH", "BOOT", "BYTE", "CHA
     "MEMORY", "MONITOR", "MOUSE", "NANOSECOND", "NETWORK", "PARTITION", "PASTE", "PDF", "PIXEL", "PROGRAMMER",
     "ROUTER", "SAVEAS", "SCANNER", "SECURITY", "SHAREWARE", "SOFTWARE", "SPAM", "TASKBAR", "THUMBNAIL", "UNIX",
     "WALLPAPER", "WIRELESS", "POWERSUPPLY"];
+// let list = ['DATA']
 // const wordPuzzle: string[][] = [['C', 'B', 'A'], ['A', 'R', 'M'], ['T', 'A', 'V'], ['A', 'M', 'J'], ['N', 'M', 'J'], ['J', 'M', 'J']];
 // const wordList: string[] = ['CATAN', 'ART', 'ARM', 'RBA'];
 let myClass = new WordPuzzleSolver();
