@@ -153,24 +153,47 @@ class WordPuzzleSolver {
     public solve(puzzle: string[][], wordList: string[]) {
         this.paddedWordPuzzle = this.padPuzzleWithBoundaries(puzzle, this.boundaryCharacter);
         this.populateLetterMapWith(this.paddedWordPuzzle);
+        let counter = 0;
         for(const word of wordList){
             let result;
             const startingPoints = this.letterMap[word[0]];
-            console.log(word);
             for(const point of startingPoints) {
                 result = this.searchForWord(point, word);
                 if(result.length > 0){
+                    console.log(word);
                     this.printCoordArray(result);
+                    counter++;
                 }
             }
         }
         // this.printOutLetterMap();
+        console.log(`\nWords found; ${counter}\n`)
         this.printWordPuzzle();
     }
 
 };
-const wordPuzzle: string[][] = [['C', 'B', 'A'], ['A', 'R', 'M'], ['T', 'A', 'V'], ['A', 'M', 'J'], ['N', 'M', 'J'], ['J', 'M', 'J']];
-const wordList: string[] = ['CATAN', 'ART', 'ARM', 'RBA'];
+
+const puzzle = ["TPIRCSAVAJLEXIPIGE", "LIAMEMORYMMOUSENIL", "CRABKSATXINUYHSTFG", "DNDIRECTORYETAOEOO",
+    "POWERSUPPLYNIRFRLO", "UCOASAEVASSCRETNDG", "KIROPKTYPSHRUWWEEL", "CDDECPREEAHYCAATRM",
+    "ANRIMALLTDRPERREAT", "BOLENMEIEKETSEEPHH", "RCKIPRAFCVRIIRSULM", "EEBEIARRIABOOTMBOR",
+    "NSTWRAPRGRTNWBINGO", "NOOSGNDLOODINTIOIS", "ANGMAKAULARAOTEANR", "CAEASPTLTAIPONRNDU",
+    "SNFIREWALLWREIKOOC", "TFDPRDHTOOTEULBYTE" ];
+let newPuzz: string[][] = []
+
+for(const word of puzzle){
+    let arr = [...word]
+    newPuzz.push(arr)
+}
+
+let list =  [ "APPLICATION", "BACKUP", "BINARY", "BLUETOOTH", "BOOT", "BYTE", "CHAT", "CLICK", "COOKIE", "CURSOR",
+    "DATA", "DEFRAGMENT", "DIRECTORY", "DISKDRIVE", "DOS", "DRAG", "EMAIL", "ENCRYPTION", "FILE", "FIREWALL",
+ "FOLDER", "GIF", "GOOGLE", "HTML", "ICON", "INTERNET", "JAVASCRIPT", "KERNAL", "LCD", "LOGIN",
+ "MEMORY", "MONITOR", "MOUSE", "NANOSECOND", "NETWORK", "PARTITION", "PASTE", "PDF", "PIXEL", "PROGRAMMER",
+ "ROUTER", "SAVEAS", "SCANNER", "SECURITY", "SHAREWARE", "SOFTWARE", "SPAM", "TASKBAR", "THUMBNAIL", "UNIX",
+ "WALLPAPER", "WIRELESS", "POWERSUPPLY" ];
+
+// const wordPuzzle: string[][] = [['C', 'B', 'A'], ['A', 'R', 'M'], ['T', 'A', 'V'], ['A', 'M', 'J'], ['N', 'M', 'J'], ['J', 'M', 'J']];
+// const wordList: string[] = ['CATAN', 'ART', 'ARM', 'RBA'];
 
 let myClass = new WordPuzzleSolver();
-myClass.solve(wordPuzzle,wordList);
+myClass.solve(newPuzz,list);
