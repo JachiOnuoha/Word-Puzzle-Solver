@@ -1,3 +1,6 @@
+'use client'
+
+
 type coordinate = {
     row: number
     col: number
@@ -38,9 +41,9 @@ export class WordPuzzleSolver {
         }
     }
 
-    private printWordPuzzle() {
+    public printWordPuzzle(puzzle: string[][]) {
         let output = "";
-        for(const row of this.paddedWordPuzzle){
+        for(const row of puzzle){
             output += `${row}\n`
         }
         console.log(output);
@@ -185,7 +188,7 @@ export class WordPuzzleSolver {
         }
         // this.printOutLetterMap();
         console.log(`\nWords found; ${counter}\n`)
-        this.printWordPuzzle();
+        this.printWordPuzzle(puzzle);
     }
 
 };
@@ -214,5 +217,5 @@ let list =  [ "APPLICATION", "BACKUP", "BINARY", "BLUETOOTH", "BOOT", "BYTE", "C
 // const wordPuzzle: string[][] = [['C', 'B', 'A'], ['A', 'R', 'M'], ['T', 'A', 'V'], ['A', 'M', 'J'], ['N', 'M', 'J'], ['J', 'M', 'J']];
 // const wordList: string[] = ['CATAN', 'ART', 'ARM', 'RBA'];
 
-let myClass = new WordPuzzleSolver();
-myClass.solve(newPuzz,list);
+// let myClass = new WordPuzzleSolver();
+// myClass.solve(newPuzz,list);
