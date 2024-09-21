@@ -1,33 +1,9 @@
-'use client'
-
-import { FontSizes, Label, PrimaryButton, Stack, TextField } from "@fluentui/react";
+import dynamic from "next/dynamic";
 import Image from "next/image";
-import { WordPuzzleSolver } from "./puzzle-engine/puzzle-solver";
-import localFont from 'next/font/local';
+
+const SubmitButton = dynamic(()=> import("./components/SubmitButton"), {ssr:false})
 
 export default function Home() {
-  const puzzle = ["TPIRCSAVAJLEXIPIGE", "LIAMEMORYMMOUSENIL", "CRABKSATXINUYHSTFG", "DNDIRECTORYETAOEOO",
-    "POWERSUPPLYNIRFRLO", "UCOASAEVASSCRETNDG", "KIROPKTYPSHRUWWEEL", "CDDECPREEAHYCAATRM",
-    "ANRIMALLTDRPERREAT", "BOLENMEIEKETSEEPHH", "RCKIPRAFCVRIIRSULM", "EEBEIARRIABOOTMBOR",
-    "NSTWRAPRGRTNWBINGO", "NOOSGNDLOODINTIOIS", "ANGMAKAULARAOTEANR", "CAEASPTLTAIPONRNDU",
-    "SNFIREWALLWREIKOOC", "TFDPRDHTOOTEULBYTE"];
-  let newPuzz: string[][] = []
-
-  for (const word of puzzle) {
-    let arr = [...word]
-    newPuzz.push(arr)
-  }
-
-  let list = ["APPLICATION", "BACKUP", "BINARY", "BLUETOOTH", "BOOT", "BYTE", "CHAT", "CLICK", "COOKIE", "CURSOR",
-    "DATA", "DEFRAGMENT", "DIRECTORY", "DISKDRIVE", "DOS", "DRAG", "EMAIL", "ENCRYPTION", "FILE", "FIREWALL",
-    "FOLDER", "GIF", "GOOGLE", "HTML", "ICON", "INTERNET", "JAVASCRIPT", "KERNAL", "LCD", "LOGIN",
-    "MEMORY", "MONITOR", "MOUSE", "NANOSECOND", "NETWORK", "PARTITION", "PASTE", "PDF", "PIXEL", "PROGRAMMER",
-    "ROUTER", "SAVEAS", "SCANNER", "SECURITY", "SHAREWARE", "SOFTWARE", "SPAM", "TASKBAR", "THUMBNAIL", "UNIX",
-    "WALLPAPER", "WIRELESS", "POWERSUPPLY"];
-
-  let myClass = new WordPuzzleSolver;
-  // myClass.solve(newPuzz,list);
-
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
@@ -52,18 +28,7 @@ export default function Home() {
         </ol> */}
 
         <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <Stack tokens={{childrenGap: 25}}>
-            <TextField
-              width={500}
-              placeholder='Enter puzzle image url'
-            />
-            < PrimaryButton
-              className="dark"
-              width={20}
-              height={20}
-              text=" Let's Solve it!!"
-            />
-          </Stack>
+            <SubmitButton/>
           {/* <a
             className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
             href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"

@@ -1,6 +1,5 @@
 'use client'
 
-
 type coordinate = {
     row: number
     col: number
@@ -23,7 +22,7 @@ export class WordPuzzleSolver {
     private initializeLetterMap(): letterMap {
         let resultLetterMap: letterMap = {};
         let tempArr = Array.from(Array(26))
-        let letterArr: string[] = [...tempArr.keys()].map((_, i) => String.fromCharCode(i + 65))
+        let letterArr: string[] = [...tempArr].map((_, i) => String.fromCharCode(i + 65))
         for (const letter of letterArr) {
             resultLetterMap[letter] = []
         }
@@ -76,7 +75,7 @@ export class WordPuzzleSolver {
 
     /* Pads the puzzle matrix with a boundary character to eliminate the need for boundary checking */
     private padPuzzleWithBoundaries (puzzle: string[][], boundaryCharacter: string): string[][] {
-        let paddedPuzzle = puzzle;
+        var paddedPuzzle = structuredClone(puzzle);
 
         // Pad each row of the puzzle to create padded columns
         for(const row of paddedPuzzle){
@@ -85,8 +84,8 @@ export class WordPuzzleSolver {
         }
 
         // Generate padding array
-        const tempArr = Array.from(Array(puzzle[0].length));
-        const paddingArr = [...tempArr.keys()].map((_,i)=> boundaryCharacter);
+        const tempArr = Array.from(Array(paddedPuzzle[0].length));
+        const paddingArr = [...tempArr].map((_,i)=> boundaryCharacter);
 
         // Pad the first and last rows
         paddedPuzzle.push(paddingArr);
@@ -169,6 +168,7 @@ export class WordPuzzleSolver {
 
     public solve(puzzle: string[][], wordList: string[]) {
         this.paddedWordPuzzle = this.padPuzzleWithBoundaries(puzzle, this.boundaryCharacter);
+        console.log(puzzle);
         this.populateLetterMapWith(this.paddedWordPuzzle);
         let counter = 0;
         for(const word of wordList){
@@ -188,34 +188,7 @@ export class WordPuzzleSolver {
         }
         // this.printOutLetterMap();
         console.log(`\nWords found; ${counter}\n`)
-        this.printWordPuzzle(puzzle);
+        this.printWordPuzzle(this.paddedWordPuzzle);
     }
 
 };
-
-const puzzle = ["TPIRCSAVAJLEXIPIGE", "LIAMEMORYMMOUSENIL", "CRABKSATXINUYHSTFG", "DNDIRECTORYETAOEOO",
-    "POWERSUPPLYNIRFRLO", "UCOASAEVASSCRETNDG", "KIROPKTYPSHRUWWEEL", "CDDECPREEAHYCAATRM",
-    "ANRIMALLTDRPERREAT", "BOLENMEIEKETSEEPHH", "RCKIPRAFCVRIIRSULM", "EEBEIARRIABOOTMBOR",
-    "NSTWRAPRGRTNWBINGO", "NOOSGNDLOODINTIOIS", "ANGMAKAULARAOTEANR", "CAEASPTLTAIPONRNDU",
-    "SNFIREWALLWREIKOOC", "TFDPRDHTOOTEULBYTE" ];
-let newPuzz: string[][] = []
-
-for(const word of puzzle){
-    let arr = [...word]
-    newPuzz.push(arr)
-}
-
-let list =  [ "APPLICATION", "BACKUP", "BINARY", "BLUETOOTH", "BOOT", "BYTE", "CHAT", "CLICK", "COOKIE", "CURSOR",
-    "DATA", "DEFRAGMENT", "DIRECTORY", "DISKDRIVE", "DOS", "DRAG", "EMAIL", "ENCRYPTION", "FILE", "FIREWALL",
- "FOLDER", "GIF", "GOOGLE", "HTML", "ICON", "INTERNET", "JAVASCRIPT", "KERNAL", "LCD", "LOGIN",
- "MEMORY", "MONITOR", "MOUSE", "NANOSECOND", "NETWORK", "PARTITION", "PASTE", "PDF", "PIXEL", "PROGRAMMER",
- "ROUTER", "SAVEAS", "SCANNER", "SECURITY", "SHAREWARE", "SOFTWARE", "SPAM", "TASKBAR", "THUMBNAIL", "UNIX",
- "WALLPAPER", "WIRELESS", "POWERSUPPLY" ];
-
-// let list = ['DATA']
-
-// const wordPuzzle: string[][] = [['C', 'B', 'A'], ['A', 'R', 'M'], ['T', 'A', 'V'], ['A', 'M', 'J'], ['N', 'M', 'J'], ['J', 'M', 'J']];
-// const wordList: string[] = ['CATAN', 'ART', 'ARM', 'RBA'];
-
-// let myClass = new WordPuzzleSolver();
-// myClass.solve(newPuzz,list);
