@@ -2,6 +2,10 @@
 import { PrimaryButton } from "@fluentui/react";
 import { WordPuzzleSolver } from "../puzzle-engine/puzzle-solver";
 
+type clickHandler = {
+  (string: string): void;
+}
+
 
 const puzzle = ["TPIRCSAVAJLEXIPIGE", "LIAMEMORYMMOUSENIL", "CRABKSATXINUYHSTFG", "DNDIRECTORYETAOEOO",
     "POWERSUPPLYNIRFRLO", "UCOASAEVASSCRETNDG", "KIROPKTYPSHRUWWEEL", "CDDECPREEAHYCAATRM",
@@ -24,7 +28,18 @@ const puzzle = ["TPIRCSAVAJLEXIPIGE", "LIAMEMORYMMOUSENIL", "CRABKSATXINUYHSTFG"
 
   let myClass = new WordPuzzleSolver;
 
-export default function SubmitButton() {
+  type submitButtonProps = {
+    submittedUrl: string,
+    handleOnClick: clickHandler
+  }
+
+export default function SubmitButton(props: submitButtonProps) {
+
+  function handleOnSubmit(){
+    props.handleOnClick(props.submittedUrl);
+    myClass.solve(newPuzz, list);
+  };
+
     return (
         <>
             < PrimaryButton
@@ -32,10 +47,7 @@ export default function SubmitButton() {
               width={20}
               height={20}
               text=" Let's Solve it!!"
-              onClick={()=> {
-                myClass.solve(newPuzz, list);
-                console.log(newPuzz);
-            }}
+              onClick={handleOnSubmit}
             />
         </>)
 };
